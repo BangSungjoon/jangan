@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: local
   application:
     name: jangan-backend
   jackson:
@@ -37,6 +39,7 @@ minio:
   secret-key: ${MINIO_SECRET_KEY}
   bucket:
     name: jangan
+    imagelog: ${BUCKET_IMAGELOG}
 
 springdoc:
   api-docs:
