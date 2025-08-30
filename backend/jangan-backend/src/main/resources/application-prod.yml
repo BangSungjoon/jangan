@@ -41,13 +41,13 @@ spring:
     open-in-view: false
 
 # --- DigitalOcean Spaces 설정 ---
-spaces:
+minio:
   url: https://${SPACES_ENDPOINT}
   access-key: ${SPACES_ACCESS_KEY}
   secret-key: ${SPACES_SECRET_KEY}
   bucket:
     name: jangan
-    imagelog: ${BUCKET_IMAGELOG}
+    imagelog: ${SPACES_IMAGELOG}
 
 # --- Swagger(API 문서) 설정 ---
 springdoc:
