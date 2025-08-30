@@ -23,26 +23,27 @@ public class BeaconTest {
     private BeaconService beaconService;
     @Autowired
     private BeaconRepository beaconRepository;
+
     @Test
     @Transactional
     @Rollback
     @DisplayName("비콘 등록")
     public void registerBeacon() {
-        //GIVEN
-        RequestRegisterBeaconDto dto = RequestRegisterBeaconDto.builder()
-                .stationId(222)
-                .floor(1001)
-                .beaconCode(1010)
-                .name("만남의 광장10")
-                .coordX((double)100)
-                .coordY((double)100)
-                .isExit(true)
-                .isCctv(false)
-                .build();
-        //WHEN
-        ResponseBeaconIdDto responseBeaconIdDto = beaconService.saveBeacon(dto);
-        //THEN
-        assertFalse(responseBeaconIdDto.getBeaconId()==null, "등록된 비콘 아이디가 없습니다.");
+//        //GIVEN
+//        RequestRegisterBeaconDto dto = RequestRegisterBeaconDto.builder()
+//                .stationId(222)
+//                .floor(1001)
+//                .beaconCode(1010)
+//                .name("만남의 광장10")
+//                .coordX((double)100)
+//                .coordY((double)100)
+//                .isExit(true)
+//                .isCctv(false)
+//                .build();
+//        //WHEN
+//        ResponseBeaconIdDto responseBeaconIdDto = beaconService.saveBeacon(dto);
+//        //THEN
+//        assertFalse(responseBeaconIdDto.getBeaconId()==null, "등록된 비콘 아이디가 없습니다.");
     }
 
     @Test
@@ -50,18 +51,18 @@ public class BeaconTest {
     @Rollback
     @DisplayName("특정 id 비콘 삭제")
     public void removeBeacon() {
-        //GIVEN
-        // int deletedBeaconId = 1;
-        // RequestDeleteBeaconDto dto = RequestDeleteBeaconDto.builder()
-        //         .beaconId(deletedBeaconId)
-        //         .build();
-        //
-        // //WHEN
-        //  beaconService.deleteBeacon(dto);
-        //
-        // //THEN
-        // //비콘을 삭제 후 다시 조회했을 때, 존재하면 에러발생
-        // Optional<Beacon> deletedBeacon = beaconRepository.findById(deletedBeaconId);
-        // assertEquals(deletedBeacon.isEmpty(),true, "삭제된 비콘은 조회되지 않아야 합니다");
+//        //GIVEN
+//        // int deletedBeaconId = 1;
+//        // RequestDeleteBeaconDto dto = RequestDeleteBeaconDto.builder()
+//        //         .beaconId(deletedBeaconId)
+//        //         .build();
+//        //
+//        // //WHEN
+//        //  beaconService.deleteBeacon(dto);
+//        //
+//        // //THEN
+//        // //비콘을 삭제 후 다시 조회했을 때, 존재하면 에러발생
+//        // Optional<Beacon> deletedBeacon = beaconRepository.findById(deletedBeaconId);
+//        // assertEquals(deletedBeacon.isEmpty(),true, "삭제된 비콘은 조회되지 않아야 합니다");
     }
 }

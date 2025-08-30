@@ -1,46 +1,55 @@
 spring:
-  config:
-    import: classpath:/env.yml
   application:
     name: jangan-backend
   jackson:
-    property-naming-strategy: SNAKE_CASE # snake_case <-> camelCase 자동 변환
+    property-naming-strategy: SNAKE_CASE
+
+  # --- Redis 설정 ---
   data:
     redis:
-      host: ${REDIS_HOST}
+      host: redis
       port: 6379
       password: ${REDIS_PASSWORD}
+
   servlet:
     multipart:
       maxFileSize: 50MB
       maxRequestSize: 1000MB
 
+  # --- 데이터베이스 설정 ---
   datasource:
     url: ${MYSQL_URL}
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      max-lifetime: 60000
+      pool-name: Jangan-CP
+      maximum-pool-size: 10 # 최대 커넥션 개수 10개
+      max-lifetime: 1800000 # 30분
+      connection-timeout: 30000 # 커넥션 타임아웃 30초
+      validation-timeout: 5000 # 커넥션 유효성 검사 타임아웃 5초
 
+  # --- JPA 설정 ---
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: false
         show_sql: false
     open-in-view: false
 
+# --- DigitalOcean Spaces 설정 ---
 minio:
-  url: ${MINIO_URL}
-  access-key: ${MINIO_ACCESS_KEY}
-  secret-key: ${MINIO_SECRET_KEY}
+  url: https://${SPACES_ENDPOINT}
+  access-key: ${SPACES_ACCESS_KEY}
+  secret-key: ${SPACES_SECRET_KEY}
   bucket:
     name: jangan
     imagelog: ${BUCKET_IMAGELOG}
 
+# --- Swagger(API 문서) 설정 ---
 springdoc:
   api-docs:
     path: /api/api-docs

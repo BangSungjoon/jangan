@@ -36,8 +36,9 @@ out/
 ### VS Code ###
 .vscode/
 
-# 모든 디렉터리의 .env 파일 무시
-**/env.yml
+# .env 파일 무시
+env.yml
+**/.env
 
 # firebase adminsdk
 jangan204-firebase-adminsdk.json
