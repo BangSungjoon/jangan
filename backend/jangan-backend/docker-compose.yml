@@ -4,7 +4,6 @@ services:
   # 1. Spring Boot 애플리케이션 서비스
   app:
     build: .
-    container_name: jangan-backend
     restart: always
     environment:
       - SPRING_PROFILES_ACTIVE=prod
