@@ -47,7 +47,6 @@ minio:
   secret-key: ${SPACES_SECRET_KEY}
   bucket:
     name: jangan
-    imagelog: ${BUCKET_IMAGELOG}
 
 # --- Swagger(API 문서) 설정 ---
 springdoc:
