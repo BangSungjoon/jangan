@@ -19,7 +19,7 @@ spring:
   # --- 데이터베이스 설정 ---
   datasource:
     url: ${MYSQL_URL}
-    username: ${MYSQL_USERNAME}
+    username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
@@ -42,7 +42,7 @@ spring:
 
 # --- DigitalOcean Spaces 설정 ---
 minio:
-  url: https://${SPACES_ENDPOINT}
+  url: ${SPACES_ENDPOINT}
   access-key: ${SPACES_ACCESS_KEY}
   secret-key: ${SPACES_SECRET_KEY}
   bucket:
