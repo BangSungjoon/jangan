@@ -12,4 +12,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'), // ← @을 src 폴더로 매핑
     },
   },
+  server: {
+      port: 5174,
+  },
 })
