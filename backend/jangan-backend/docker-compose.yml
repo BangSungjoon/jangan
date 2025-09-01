@@ -24,9 +24,11 @@ services:
     image: mysql:8.0
     container_name: jangan-db
     restart: always
+    ports:
+      - "3307:3306"
     environment:
-      - MYSQL_DATABASE=jangan_db
-      - MYSQL_USER=jangan_user
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USERNAME}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
