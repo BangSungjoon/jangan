@@ -1,5 +1,6 @@
 package com.ssafy.jangan_mobile.ui.viewmodel
 
+import android.R
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,7 +27,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
     private val _mapImageUrl = MutableStateFlow<String?>(null)
     val mapImageUrl: StateFlow<String?> = _mapImageUrl
 
-    fun fetchMapImage(stationId: String, floorCode: String) {
+    fun fetchMapImage(stationId: Int, floorCode: String) {
         Log.d("✅MapViewModel", "💥 함수 진입 확인됨!")
         viewModelScope.launch {
             try {

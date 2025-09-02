@@ -18,7 +18,7 @@ interface MapService {
     // 평면도 가져오기
     @GET("/api/map/mobile")
     suspend fun getMapImage(
-        @Query("station_id") stationId: String
+        @Query("station_id") stationId: Int
     ): Response<MapImageResponse>
 
     // 경로 탐색하기

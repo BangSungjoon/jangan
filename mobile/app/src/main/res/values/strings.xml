@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">jangan-mobile</string>
+    <string name="mapbox_access_token">sk.eyJ1IjoiaHVpc29vb28iLCJhIjoiY21leGozYjg2MHJldjJqcjFwZnV4Yzh5byJ9.Bszis230qrI5cHvLbZPG5Q</string>
 </resources>

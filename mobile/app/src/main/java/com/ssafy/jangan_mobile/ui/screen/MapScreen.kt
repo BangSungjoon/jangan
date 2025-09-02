@@ -176,7 +176,7 @@ fun EscapeRouteMapScreen(
     // 이미지 로드
     LaunchedEffect(Unit) {
         Log.d("EscapeRouteScreen", "✅ EscapeRouteMapScreen 진입")
-        mapViewModel.fetchMapImage("222", "1001")
+        mapViewModel.fetchMapImage(222, "1001")
     }
 
     // 내 위치 요청
@@ -202,7 +202,7 @@ fun EscapeRouteMapScreen(
     // 층 변경 시 이미지 요청
     LaunchedEffect(selectedFloor.value) {
         val floorCode = floorStringToCode(selectedFloor.value)?.toString() ?: return@LaunchedEffect
-        mapViewModel.fetchMapImage("222", floorCode)
+        mapViewModel.fetchMapImage(222, floorCode)
     }
 
     // 🔥 실제 화재 발생한 비콘 중 첫 번째 찾기
