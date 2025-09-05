@@ -17,9 +17,9 @@
     "form-data": "^4.0.2",
     "fs": "^0.0.1-security",
     "node-rtsp-stream": "^0.0.9",
+    "redis": "^5.8.2",
     "sqlite3": "^5.1.7",
     "ws": "^8.18.1"
   },
-  "devDependencies": {},
   "description": ""
 }

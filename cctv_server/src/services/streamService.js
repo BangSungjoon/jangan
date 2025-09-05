@@ -28,12 +28,13 @@ const startStreams = async (stationId, cctvList) => {
         streamUrl: rtsp_url,
         wsPort: wsPort,
       });
-      
-      //로컬 ip 주소
-      const ipAddress = '172.20.0.1';
+
+      // ip 주소
+      const ipAddress = process.env.SERVER_IP;
 
       stream.wsServer.on('connection', () => {
         console.log(`웹 소켓 연결됨: ws://${ipAddress}:${wsPort}`);
+        activeStreams.set(beacon_code, stream); // 활성 스트림에 추가
       });
 
       stream.on('error', (err) => {
@@ -41,8 +42,6 @@ const startStreams = async (stationId, cctvList) => {
         activeStreams.delete(beacon_code);
         usedPorts.delete(wsPort);
       });
-
-      activeStreams.set(beacon_code, stream);
 
       try {
         const wsUrl = `ws://${ipAddress}:${wsPort}`;

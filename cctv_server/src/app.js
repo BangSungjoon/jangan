@@ -16,15 +16,12 @@ app.use(express.json());
 app.use('/api', routes);
 
 (async () => {
-  await initializeDb(); // DB 초기화
   const stationId = process.env.STATION_ID;
   // const cctvData = await apiService.fetchCctvData(stationId); // CCTV 정보 가져오기
   // const cctvList = cctvData.result
 
   const cctvList = [
       { beacon_code: 1001, rtsp_url: "rtsp://172.20.0.1:554/cctv"},
-  //     { beacon_code: 1002, rtsp_url: "rtsp://localhost/cctv"},
-  //     { beacon_code: 1003, rtsp_url: "rtsp://localhost/cctv"},
   ]
 
   frameService.initializeFrameExtraction(stationId, cctvList);
