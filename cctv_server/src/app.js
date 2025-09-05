@@ -21,7 +21,7 @@ app.use('/api', routes);
   // const cctvList = cctvData.result
 
   const cctvList = [
-      { beacon_code: 1001, rtsp_url: "rtsp://172.20.0.1:554/cctv"},
+      { beacon_code: 1001, rtsp_url: "rtsp://192.168.0.7:554/cctv"},
   ]
 
   frameService.initializeFrameExtraction(stationId, cctvList);
