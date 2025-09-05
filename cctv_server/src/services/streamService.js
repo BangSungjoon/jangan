@@ -30,7 +30,7 @@ const startStreams = async (stationId, cctvList) => {
       });
       
       //로컬 ip 주소
-      const ipAddress = '70.12.247.93';
+      const ipAddress = '172.20.0.1';
 
       stream.wsServer.on('connection', () => {
         console.log(`웹 소켓 연결됨: ws://${ipAddress}:${wsPort}`);

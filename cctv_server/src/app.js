@@ -9,7 +9,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://j12a204.p.ssafy.io'],
+  origin: ['http://localhost:5174', 'http://152.42.220.24'],
   methods: ['GET'],
 }));
 app.use(express.json());
@@ -22,12 +22,12 @@ app.use('/api', routes);
   // const cctvList = cctvData.result
 
   const cctvList = [
-      { beacon_code: 9090, rtsp_url: "rtsp://localhost:554/cctv"},
+      { beacon_code: 1001, rtsp_url: "rtsp://172.20.0.1:554/cctv"},
   //     { beacon_code: 1002, rtsp_url: "rtsp://localhost/cctv"},
   //     { beacon_code: 1003, rtsp_url: "rtsp://localhost/cctv"},
   ]
 
-  // frameService.initializeFrameExtraction(stationId, cctvList);
+  frameService.initializeFrameExtraction(stationId, cctvList);
   streamService.startStreams(stationId, cctvList);
 })();
 
