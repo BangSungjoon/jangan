@@ -20,6 +20,7 @@ app.use('/api', routes);
   // const cctvData = await apiService.fetchCctvData(stationId); // CCTV 정보 가져오기
   // const cctvList = cctvData.result
 
+  // 테스트용 cctvList
   const cctvList = [
       { beacon_code: 1001, rtsp_url: "rtsp://192.168.0.7:554/cctv"},
   ]
