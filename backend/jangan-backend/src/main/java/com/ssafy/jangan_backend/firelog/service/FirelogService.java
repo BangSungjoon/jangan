@@ -7,6 +7,7 @@ import com.ssafy.jangan_backend.fcm.entity.FcmToken;
 import com.ssafy.jangan_backend.fcm.repository.FcmTokenRepository;
 import com.ssafy.jangan_backend.firelog.dto.*;
 import com.ssafy.jangan_backend.station.service.StationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class FirelogService {
 	private final MapRepository mapRepository;
 	private final BeaconRepository beaconRepository;
@@ -109,6 +111,7 @@ public class FirelogService {
 					.build();
 				firelogRepository.save(fireLog);
 				isChanged = true;
+				log.info("화재 진압된 isChanged: {}", isChanged);
 			}else{ // 화재 상태
 				//isOnFire = true;
 				dangerBeacons.add(fireInfo.getBeaconCode());
@@ -122,15 +125,18 @@ public class FirelogService {
 				firelogRepository.save(fireLog);
 				// 신규 발생한 화재인 경우
 				String presignedUrl = minioUtil.getPresignedUrl(MinioUtil.BUCKET_IMAGELOGS, fileName);
+				log.info("신규 발생 화재 직후의 isChanged: {}", isChanged);
 				if(firelogOptional.isEmpty() || !firelogOptional.get().getIsActiveFire()){
 					fireNotificationDto.getBeaconNotificationDtos().add(new BeaconNotificationDto(beacon.getName(), beacon.getBeaconCode(), beacon.getCoordX(), beacon.getCoordY(), beacon.getMap().getFloor(), presignedUrl, 1));
 					isChanged = true;
+					log.info("신규 발생 화재 isChanged: {}", isChanged);
 				} else {
 					fireNotificationDto.getBeaconNotificationDtos().add(new BeaconNotificationDto(beacon.getName(), beacon.getBeaconCode(), beacon.getCoordX(), beacon.getCoordY(), beacon.getMap().getFloor(), presignedUrl, 0));
 				}
 			}
 		}
 		if(isChanged){ // 상태 변화 감지 시 최단 경로 계산
+			log.info("경로 계산 단계로 넘어온 상태의 isChanged: {}", isChanged);
 			EscapeRoute escapeRoute = escapeRouteService.calculateEscapeRoute(station, beaconList, dangerBeacons);
 
 			//	escapeRouteRepository.save(escapeRoute);
