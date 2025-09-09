@@ -76,10 +76,10 @@ public class BeaconService {
             throw new CustomIllegalArgumentException(BaseResponseStatus.BEACON_NOT_FOUND_EXCEPTION);
         }
         return beaconList.stream()
-                .filter(Beacon::getIsCctv)
+                .filter(beacon -> beacon.getCctvIp() != null && beacon.getCctvIp().startsWith("rtsp://"))
                 .map(beacon -> ResponseCctvInfoDto.builder()
                         .beaconCode(beacon.getBeaconCode())
-                        .rtspUrl("rtsp://" + beacon.getCctvIp() + ":554/cctv")
+                        .rtspUrl(beacon.getCctvIp())
                         .build())
                 .toList();
     }
