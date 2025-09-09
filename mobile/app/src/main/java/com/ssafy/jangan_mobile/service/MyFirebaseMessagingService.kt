@@ -98,7 +98,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
                     FireNotificationStore.setCurrentNotificationBeaconCode(nearestBeaconCode, this)
                 }
                 stopSelf()
-            }, 2_000)
+            }, 1000)
         }
     }
 

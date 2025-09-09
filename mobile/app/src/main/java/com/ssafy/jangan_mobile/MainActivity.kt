@@ -332,8 +332,15 @@ class MainActivity : ComponentActivity() {
 
             // Android 10 이상에서 백그라운드 위치 권한 별도 요청
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
 
                 backgroundLocationPermissionLauncher.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
             } else {
@@ -384,7 +391,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            Log.d("ForegroundBeacon", "포그라운드 가장 가까운 비콘 - station: ${nearestStationId}, code:${nearestBeaconCode}, distance:${nearestBeaconDistance}")
+            Log.d(
+                "ForegroundBeacon",
+                "포그라운드 가장 가까운 비콘 - station: ${nearestStationId}, code:${nearestBeaconCode}, distance:${nearestBeaconDistance}"
+            )
             FireNotificationStore.setCurrentLocationBeaconCode(nearestBeaconCode, this)
             FireNotificationStore.setCurrentLocationStationId(nearestStationId, this)
         }
@@ -399,55 +409,81 @@ class MainActivity : ComponentActivity() {
 
             val channel = NotificationChannel(channelId, channelName, importance).apply {
                 enableVibration(true)
-                vibrationPattern = longArrayOf(0, 100, 100, 100, 100, 100, 100, 500, 500, 100, 100, 100, 100, 100, 100, 500, 500, 100, 100, 100, 100, 100, 100, 500)
+                vibrationPattern = longArrayOf(
+                    0,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    500,
+                    500,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    500,
+                    500,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    500
+                )
                 description = "화재 발생 시 긴급 알림을 받습니다"
             }
 
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.deleteNotificationChannel("alert")
             notificationManager.createNotificationChannel(channel)
         }
     }
 
-    private fun initializeForegroundBeaconManager() {
-        region = Region("foreground-beacon-scan", null, null, null)
-        beaconManager = BeaconManager.getInstanceForApplication(this)
-
-        beaconManager?.apply {
-            foregroundScanPeriod = 1000L      // 포그라운드에서는 더 빠르게
-            foregroundBetweenScanPeriod = 500L
-            updateScanPeriods()
-
-            beaconParsers?.clear()
-            beaconParsers?.add(
-                BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24")
-            )
-        }
-    }
-
-    private fun startForegroundBeaconScanning() {
-        beaconManager?.let { manager ->
-            try {
-                manager.startRangingBeacons(region)
-                manager.getRegionViewModel(region).rangedBeacons.observeForever(foregroundBeaconObserver)
-                Log.d("MainActivity", "포그라운드 비콘 스캔 시작")
-            } catch (e: Exception) {
-                Log.e("MainActivity", "포그라운드 비콘 스캔 시작 실패: ${e.message}")
-            }
-        }
-    }
-
-    private fun stopForegroundBeaconScanning() {
-        beaconManager?.let { manager ->
-            try {
-                manager.getRegionViewModel(region).rangedBeacons.removeObserver(foregroundBeaconObserver)
-                manager.stopRangingBeacons(region)
-                Log.d("MainActivity", "포그라운드 비콘 스캔 중단")
-            } catch (e: Exception) {
-                Log.e("MainActivity", "포그라운드 비콘 스캔 중단 실패: ${e.message}")
-            }
-        }
-    }
+//    private fun initializeForegroundBeaconManager() {
+//        region = Region("foreground-beacon-scan", null, null, null)
+//        beaconManager = BeaconManager.getInstanceForApplication(this)
+//
+//        beaconManager?.apply {
+//            foregroundScanPeriod = 1000L      // 포그라운드에서는 더 빠르게
+//            foregroundBetweenScanPeriod = 500L
+//            updateScanPeriods()
+//
+//            beaconParsers?.clear()
+//            beaconParsers?.add(
+//                BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24")
+//            )
+//        }
+//    }
+//
+//    private fun startForegroundBeaconScanning() {
+//        beaconManager?.let { manager ->
+//            try {
+//                manager.startRangingBeacons(region)
+//                manager.getRegionViewModel(region).rangedBeacons.observeForever(foregroundBeaconObserver)
+//                Log.d("MainActivity", "포그라운드 비콘 스캔 시작")
+//            } catch (e: Exception) {
+//                Log.e("MainActivity", "포그라운드 비콘 스캔 시작 실패: ${e.message}")
+//            }
+//        }
+//    }
+//
+//    private fun stopForegroundBeaconScanning() {
+//        beaconManager?.let { manager ->
+//            try {
+//                manager.getRegionViewModel(region).rangedBeacons.removeObserver(foregroundBeaconObserver)
+//                manager.stopRangingBeacons(region)
+//                Log.d("MainActivity", "포그라운드 비콘 스캔 중단")
+//            } catch (e: Exception) {
+//                Log.e("MainActivity", "포그라운드 비콘 스캔 중단 실패: ${e.message}")
+//            }
+//        }
+//    }
 
     private fun startPersistentService() {
         val serviceIntent = Intent(this, PersistentService::class.java)
@@ -459,21 +495,21 @@ class MainActivity : ComponentActivity() {
         Log.d("MainActivity", "백그라운드 서비스 시작")
     }
 
-    override fun onResume() {
-        super.onResume()
-        isAppInForeground = true
-        Log.d("MainActivity", "앱이 포그라운드로 전환됨")
-        // 포그라운드에서는 더 빠른 비콘 스캔 시작
-        startForegroundBeaconScanning()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        isAppInForeground = false
-        Log.d("MainActivity", "앱이 백그라운드로 전환됨")
-        // 포그라운드 비콘 스캔 중단 (백그라운드 서비스가 계속 스캔함)
-        stopForegroundBeaconScanning()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        isAppInForeground = true
+//        Log.d("MainActivity", "앱이 포그라운드로 전환됨")
+//        // 포그라운드에서는 더 빠른 비콘 스캔 시작
+//        startForegroundBeaconScanning()
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        isAppInForeground = false
+//        Log.d("MainActivity", "앱이 백그라운드로 전환됨")
+//        // 포그라운드 비콘 스캔 중단 (백그라운드 서비스가 계속 스캔함)
+//        stopForegroundBeaconScanning()
+//    }
 
     private val viewModel: SplashViewModel by viewModels()
 
@@ -503,7 +539,7 @@ class MainActivity : ComponentActivity() {
         }
 
         // 포그라운드용 비콘 매니저 초기화
-        initializeForegroundBeaconManager()
+//        initializeForegroundBeaconManager()
 
         setContent {
             AppNavigation()
@@ -548,14 +584,14 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    override fun onDestroy() {
-        Log.d("lifecycle:", "onDestroy() called.")
-        isAppInForeground = false
-        stopForegroundBeaconScanning()
-        super.onDestroy()
-    }
 }
+//    override fun onDestroy() {
+//        Log.d("lifecycle:", "onDestroy() called.")
+//        isAppInForeground = false
+//        stopForegroundBeaconScanning()
+//        super.onDestroy()
+//    }
+//}
 
 //package com.ssafy.jangan_mobile
 //

@@ -114,39 +114,70 @@ class PersistentService : Service() {
     private val CHANNEL_ID = "beacon_service_channel"
 
     private val beaconObserver = Observer<Collection<Beacon>> { beacons ->
-        val found = beacons.any {
+        // 조건에 맞는 비콘만 필터링
+        val filtered = beacons.filter {
             it.id1.toString().startsWith("AAAAA204", true)
         }
-        if (found) {
-            nearestBeaconCode = -1
-            nearestBeaconDistance = Double.MAX_VALUE
-            nearestStationId = -1
 
-            beacons.forEach { beacon ->
-                if (beacon.id1.toString().startsWith("AAAAA204", true)) {
-                    val code = beacon.id3.toInt()
-                    val distance = beacon.distance
-                    val stationId = beacon.id2.toInt()
+        if (filtered.isNotEmpty()) {
+            // RSSI 기준으로 가장 강한(=가장 가까운) 비콘 하나만 선택
+            val nearest = filtered.minByOrNull { it.rssi * -1 }  // RSSI 값 클수록 가깝다
+            nearest?.let { beacon ->
+                val code = beacon.id3.toInt()
+                val distance = beacon.distance
+                val stationId = beacon.id2.toInt()
 
-                    if (nearestBeaconDistance > distance) {
-                        nearestBeaconCode = code
-                        nearestBeaconDistance = distance
-                        nearestStationId = stationId
-                    }
-                    Log.d("BackgroundBeacon", "감지된 비콘 - code:${code} distance:${distance}")
-                }
+                nearestBeaconCode = code
+                nearestBeaconDistance = distance
+                nearestStationId = stationId
+
+                Log.d("BackgroundBeacon", "즉시 갱신 - station:$stationId, code:$code, distance:$distance")
+
+                // 현재 위치 업데이트
+                FireNotificationStore.setCurrentLocationBeaconCode(nearestBeaconCode, this)
+                FireNotificationStore.setCurrentLocationStationId(nearestStationId, this)
+
+                // 알림 업데이트 (현재 위치 정보 포함)
+                updateNotification()
             }
-
-            Log.d("BackgroundBeacon", "가장 가까운 비콘 업데이트 - station: ${nearestStationId}, code:${nearestBeaconCode}, distance:${nearestBeaconDistance}")
-
-            // 현재 위치 업데이트
-            FireNotificationStore.setCurrentLocationBeaconCode(nearestBeaconCode, this)
-            FireNotificationStore.setCurrentLocationStationId(nearestStationId, this)
-
-            // 알림 업데이트 (현재 위치 정보 포함)
-            updateNotification()
         }
     }
+
+
+//    private val beaconObserver = Observer<Collection<Beacon>> { beacons ->
+//        val found = beacons.any {
+//            it.id1.toString().startsWith("AAAAA204", true)
+//        }
+//        if (found) {
+//            nearestBeaconCode = -1
+//            nearestBeaconDistance = Double.MAX_VALUE
+//            nearestStationId = -1
+//
+//            beacons.forEach { beacon ->
+//                if (beacon.id1.toString().startsWith("AAAAA204", true)) {
+//                    val code = beacon.id3.toInt()
+//                    val distance = beacon.distance
+//                    val stationId = beacon.id2.toInt()
+//
+//                    if (nearestBeaconDistance > distance) {
+//                        nearestBeaconCode = code
+//                        nearestBeaconDistance = distance
+//                        nearestStationId = stationId
+//                    }
+//                    Log.d("BackgroundBeacon", "감지된 비콘 - code:${code} distance:${distance}")
+//                }
+//            }
+//
+//            Log.d("BackgroundBeacon", "가장 가까운 비콘 업데이트 - station: ${nearestStationId}, code:${nearestBeaconCode}, distance:${nearestBeaconDistance}")
+//
+//            // 현재 위치 업데이트
+//            FireNotificationStore.setCurrentLocationBeaconCode(nearestBeaconCode, this)
+//            FireNotificationStore.setCurrentLocationStationId(nearestStationId, this)
+//
+//            // 알림 업데이트 (현재 위치 정보 포함)
+//            updateNotification()
+//        }
+//    }
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -240,11 +271,15 @@ class PersistentService : Service() {
 
         // 백그라운드 스캔 주기 설정 (더 자주 스캔하도록)
         beaconManager?.apply {
-            foregroundScanPeriod = 4000L
-            foregroundBetweenScanPeriod = 1100L
-            backgroundScanPeriod = 3000L      // 백그라운드에서 6초마다 스캔
-            backgroundBetweenScanPeriod = 1000L  // 백그라운드에서 2초 간격
+            setEnableScheduledScanJobs(false)
+            foregroundScanPeriod = 300L
+            foregroundBetweenScanPeriod = 0L
+            backgroundScanPeriod = 500L
+            backgroundBetweenScanPeriod = 0L  // 백그라운드에서 2초 간격
+//            setEnableScheduledScanJobs(false)  // JobScheduler 비활성화
+            setBackgroundMode(false)           // 백그라운드 최적화 끄기
             updateScanPeriods()
+
 
             beaconParsers?.clear()
             beaconParsers?.add(
