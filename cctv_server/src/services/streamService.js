@@ -42,7 +42,7 @@ const startStreams = async (stationId, cctvList) => {
       });
 
       try {
-        const wsUrl = `ws://${ipAddress}:${wsPort}`;
+        const wsUrl = `ws://${process.env.SERVER_IP}:${wsPort}`;
         await storeCctvData(stationId, beacon_code, wsUrl);
         console.log(`DB에 저장된 웹소켓 주소: ${wsUrl}`);
       } catch (err) {
